@@ -6,9 +6,13 @@ import { ProductGrid } from "@/components/ProductGrid";
 import { Benefits } from "@/components/Benefits";
 import { AboutSection } from "@/components/AboutSection";
 import { CTA } from "@/components/CTA";
-import { featuredProducts } from "@/lib/data";
+import { getFeaturedProducts } from "@/lib/products";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const featured = await getFeaturedProducts();
+
   return (
     <>
       <Hero />
@@ -34,7 +38,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="mt-8">
-            <ProductGrid products={featuredProducts} />
+            <ProductGrid products={featured} />
           </div>
         </div>
       </section>

@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, PackageCheck, Truck, ShieldCheck, BadgeCheck } from "lucide-react";
-import { getProduct, PRODUCTS } from "@/lib/data";
+import { ChevronRight, PackageCheck, Truck, ShieldCheck, BadgeCheck, CalendarClock } from "lucide-react";
+import { getProductData, getProducts } from "@/lib/products";
 import { formatMoney } from "@/lib/format";
 import { AddToCartButton } from "@/components/AddToCartButton";
 import { ProductGrid } from "@/components/ProductGrid";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProductoPage({
   params,
@@ -14,12 +16,12 @@ export default async function ProductoPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = getProduct(id);
+  const [product, all] = await Promise.all([getProductData(id), getProducts()]);
   if (!product) notFound();
 
-  const related = PRODUCTS.filter(
-    (p) => p.category === product.category && p.id !== product.id
-  ).slice(0, 4);
+  const related = all
+    .filter((p) => p.category === product.category && p.id !== product.id)
+    .slice(0, 4);
 
   const isNew = product.badge === "NUEVO";
 
@@ -42,10 +44,16 @@ export default async function ProductoPage({
 
       <div className="grid gap-10 lg:grid-cols-2">
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-900">
-          {product.badge && (
-            <span className="absolute left-4 top-4 z-10 rounded-lg bg-gold-500 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-navy-950">
-              {product.badge}
+          {product.preorder ? (
+            <span className="absolute left-4 top-4 z-10 rounded-lg bg-violet-500 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-white">
+              PRE-VENTA
             </span>
+          ) : (
+            product.badge && (
+              <span className="absolute left-4 top-4 z-10 rounded-lg bg-gold-500 px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-navy-950">
+                {product.badge}
+              </span>
+            )
           )}
           <Image
             src={product.image}
@@ -67,10 +75,16 @@ export default async function ProductoPage({
           </h1>
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider ${isNew ? "bg-gold-500/15 text-gold-400" : "bg-green-500/15 text-green-400"}`}>
-              <PackageCheck className="h-3.5 w-3.5" />
-              {product.stock} unidades en stock
-            </span>
+            {product.preorder ? (
+              <span className="flex items-center gap-1.5 rounded-lg bg-violet-500/15 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+                <CalendarClock className="h-3.5 w-3.5" /> Se encarga por pedido
+              </span>
+            ) : (
+              <span className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider ${isNew ? "bg-gold-500/15 text-gold-400" : "bg-green-500/15 text-green-400"}`}>
+                <PackageCheck className="h-3.5 w-3.5" />
+                {product.stock} unidades en stock
+              </span>
+            )}
             <span className="flex items-center gap-1.5 rounded-lg bg-white/5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white/50">
               <Truck className="h-3.5 w-3.5" /> Envíos a todo el país
             </span>
@@ -88,6 +102,14 @@ export default async function ProductoPage({
               </span>
               <span className="pb-1 text-sm text-white/40">por unidad</span>
             </div>
+            {product.priceMinor != null && (
+              <p className="mt-1 text-sm text-white/45">
+                Precio sugerido de reventa:{" "}
+                <span className="font-semibold text-white/70">
+                  {formatMoney(product.priceMinor)}
+                </span>
+              </p>
+            )}
             <p className="mt-2 text-sm text-white/50">
               Consultá precios especiales por volumen en{" "}
               <Link href="/contacto" className="text-gold-400 hover:underline">
@@ -136,7 +158,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const product = getProduct(id);
+  const product = await getProductData(id);
   if (!product) return { title: "Producto no encontrado" };
   return {
     title: product.name,

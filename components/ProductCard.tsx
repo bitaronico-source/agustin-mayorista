@@ -2,17 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Check, PackageCheck, Wrench } from "lucide-react";
+import { Plus, Check, PackageCheck, Wrench, CalendarClock } from "lucide-react";
 import type { Product } from "@/lib/data";
 import { useCart } from "@/lib/cart";
 import { formatMoney } from "@/lib/format";
 import { useState } from "react";
-
-const BADGE_STYLES: Record<string, string> = {
-  NUEVO: "bg-gold-500 text-navy-950",
-  OFERTA: "bg-red-500 text-white",
-  "ÚLTIMAS UNIDADES": "bg-white text-navy-950",
-};
 
 export function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
@@ -28,11 +22,9 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-navy-900 transition-all duration-300 hover:-translate-y-1 hover:border-gold-500/40 hover:shadow-card">
-      {product.badge && (
-        <span
-          className={`absolute left-3 top-3 z-10 rounded-lg px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest ${BADGE_STYLES[product.badge]}`}
-        >
-          {product.badge}
+      {product.preorder && (
+        <span className="absolute left-3 top-3 z-10 rounded-lg bg-violet-500 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">
+          PRE-VENTA
         </span>
       )}
 
@@ -55,7 +47,11 @@ export function ProductCard({ product }: { product: Product }) {
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">
             {product.category}
           </span>
-          {lowStock ? (
+          {product.preorder ? (
+            <span className="flex items-center gap-1 rounded-md bg-violet-500/15 px-2 py-0.5 text-[10px] font-bold text-violet-300">
+              <CalendarClock className="h-3 w-3" /> SE ENCARGA
+            </span>
+          ) : lowStock ? (
             <span className="flex items-center gap-1 rounded-md bg-red-500/15 px-2 py-0.5 text-[10px] font-bold text-red-400">
               <PackageCheck className="h-3 w-3" /> BAJO STOCK
             </span>
@@ -78,6 +74,11 @@ export function ProductCard({ product }: { product: Product }) {
             <div>
               <p className="text-[10px] uppercase tracking-widest text-white/40">Precio mayorista</p>
               <p className="font-display text-2xl font-bold text-gold-400">{formatMoney(product.price)}</p>
+              {product.priceMinor != null && (
+                <p className="text-[10px] uppercase tracking-wider text-white/30">
+                  Sugerido: <span className="text-white/50">{formatMoney(product.priceMinor)}</span>
+                </p>
+              )}
             </div>
             <span className="mb-1 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-white/40">
               <Wrench className="h-3 w-3" /> x unidad

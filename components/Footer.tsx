@@ -130,7 +130,10 @@ export function Footer() {
       <div className="border-t border-white/5">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-white/40 sm:flex-row sm:px-6">
           <p>© {new Date().getFullYear()} <b className="text-white/70">Agustín Mayorista</b>. Todos los derechos reservados.</p>
-          <p>Montevideo · Uruguay</p>
+          <div className="flex items-center gap-4">
+            <span>Montevideo · Uruguay</span>
+            <Link href="/admin" className="transition hover:text-gold-400">Admin</Link>
+          </div>
         </div>
       </div>
     </footer>

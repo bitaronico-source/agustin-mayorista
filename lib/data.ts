@@ -3,10 +3,12 @@ export type Product = {
   name: string;
   category: string;
   price: number;
+  priceMinor?: number;
   stock: number;
   image: string;
   badge?: "NUEVO" | "OFERTA" | "ÚLTIMAS UNIDADES";
   featured?: boolean;
+  preorder?: boolean;
   description: string;
 };
 
@@ -18,6 +20,8 @@ export type Category = {
 
 const size = (id: string, w = 800) =>
   `https://images.unsplash.com/photo-${id}?q=75&w=${w}&auto=format&fit=crop`;
+
+export const PLACEHOLDER_IMG = size("1553413077-190dd305871c", 800);
 
 export const HERO_IMG = size("1553413077-190dd305871c", 1920);
 export const ABOUT_IMG = size("1586528116311-ad8dd3c8310d", 1400);

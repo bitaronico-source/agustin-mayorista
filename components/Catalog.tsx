@@ -2,15 +2,19 @@
 
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal, ArrowDownWideNarrow } from "lucide-react";
-import { PRODUCTS, FILTER_CATEGORIES } from "@/lib/data";
+import type { Product } from "@/lib/data";
 import { ProductGrid } from "@/components/ProductGrid";
 
 type Sort = "relevancia" | "price-asc" | "price-desc" | "novedades";
 
 export function Catalog({
+  products,
+  categories,
   initialCategory,
   initialQuery,
 }: {
+  products: Product[];
+  categories: string[];
   initialCategory?: string;
   initialQuery?: string;
 }) {
@@ -18,8 +22,8 @@ export function Catalog({
   const [category, setCategory] = useState(initialCategory ?? "TODOS");
   const [sort, setSort] = useState<Sort>("relevancia");
 
-  const products = useMemo(() => {
-    let list = PRODUCTS.filter((p) => {
+  const filtered = useMemo(() => {
+    let list = products.filter((p) => {
       const matchesQ =
         !query ||
         `${p.name} ${p.category} ${p.description}`
@@ -36,7 +40,7 @@ export function Catalog({
         (a, b) => Number(b.badge === "NUEVO") - Number(a.badge === "NUEVO")
       );
     return list;
-  }, [query, category, sort]);
+  }, [products, query, category, sort]);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
@@ -72,7 +76,7 @@ export function Catalog({
           <SlidersHorizontal className="h-4 w-4" /> Categorías
         </span>
         <div className="no-scrollbar flex flex-1 gap-2 overflow-x-auto">
-          {["TODOS", ...FILTER_CATEGORIES].map((c) => (
+          {["TODOS", ...categories].map((c) => (
             <button
               key={c}
               onClick={() => setCategory(c)}
@@ -106,9 +110,9 @@ export function Catalog({
 
       <div className="mt-8">
         <p className="mb-4 text-sm text-white/40">
-          {products.length} {products.length === 1 ? "producto" : "productos"}
+          {filtered.length} {filtered.length === 1 ? "producto" : "productos"}
         </p>
-        <ProductGrid products={products} />
+        <ProductGrid products={filtered} />
       </div>
     </section>
   );
