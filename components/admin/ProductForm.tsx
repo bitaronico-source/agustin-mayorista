@@ -91,6 +91,7 @@ export function ProductForm({ product, categories, isNew }: Props) {
                 <div>
                   <label className={labelCls}>Nombre *</label>
                   <input
+                    name="name"
                     value={name}
                     onChange={(e) => syncName(e.target.value)}
                     className={inputCls}
