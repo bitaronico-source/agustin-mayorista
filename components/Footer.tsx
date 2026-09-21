@@ -49,17 +49,9 @@ export function Footer() {
           </p>
           <div className="mt-5 flex gap-2">
             <SocialIcon
-              label="Facebook"
-              path="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-            />
-            <SocialIcon
               label="Instagram"
               href={SITE.instagram}
               path="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm0 2a2 2 0 1 1-2 2 2 2 0 0 1 2-2z"
-            />
-            <SocialIcon
-              label="TikTok"
-              path="M12 4c.5-2.2 2.3-4 4.7-4a5.6 5.6 0 0 0 1.3.6c.2 1.6 1.4 3 3 3.4v3.2c-1.4 0-2.8-.5-3.8-1.2v6.9A5.7 5.7 0 1 1 8.5 11v3.1a2.6 2.6 0 1 0 2.7 2.6V0h3.2v2.8c.9.7 2 1.2 3.3 1.2V4zM9.3 18.4h0A2.5 2.5 0 0 0 13 15.8V4h-3.2v11.9a2.6 2.6 0 0 1-.5 2.5z"
             />
             <SocialIcon
               label="WhatsApp"
