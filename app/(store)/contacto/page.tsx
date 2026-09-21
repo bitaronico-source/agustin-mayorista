@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowRight } from "lucide-react";
+import { Clock, MessageCircle, Mail, ArrowRight } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { SITE } from "@/lib/site";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm0 2a2 2 0 1 1-2 2 2 2 0 0 1 2-2z" />
+    </svg>
+  );
+}
 
 export const metadata: Metadata = {
   title: "Contacto",
   description:
-    "Contactate con Agustín Mayorista: WhatsApp, teléfono, email, ubicación y horarios de atención. Asesoramiento para tu comercio.",
+    "Contactate con Agustín Mayorista: WhatsApp, teléfono, email e Instagram. Asesoramiento para tu comercio.",
 };
 
 const CHANNELS = [
@@ -19,13 +27,6 @@ const CHANNELS = [
     external: true,
   },
   {
-    icon: Phone,
-    title: "Teléfono",
-    value: SITE.phone,
-    href: `tel:${SITE.phone.replace(/\s/g, "")}`,
-    note: "Lunes a Sábados",
-  },
-  {
     icon: Mail,
     title: "Email",
     value: SITE.email,
@@ -33,11 +34,12 @@ const CHANNELS = [
     note: "Ventas y facturación",
   },
   {
-    icon: MapPin,
-    title: "Ubicación",
-    value: SITE.address,
-    href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.address)}`,
-    note: "Montevideo, Uruguay",
+    icon: InstagramIcon,
+    title: "Instagram",
+    value: SITE.instagramHandle,
+    href: SITE.instagram,
+    note: "Novedades y promos",
+    external: true,
   },
 ];
 
@@ -101,13 +103,6 @@ export default function ContactoPage() {
                     <br />
                     {SITE.hoursSab}
                   </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-gold-400" />
-                <div>
-                  <p className="text-sm font-bold uppercase tracking-widest text-white">Depósito y showroom</p>
-                  <p className="mt-1 text-sm text-white/60">{SITE.address}</p>
                 </div>
               </div>
             </div>

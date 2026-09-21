@@ -1,8 +1,6 @@
 import Link from "next/link";
 import {
-  Phone,
   Mail,
-  MapPin,
   Clock,
   MessageCircle,
   ArrowRight,
@@ -10,10 +8,12 @@ import {
 import { SITE } from "@/lib/site";
 import { CATEGORIES } from "@/lib/data";
 
-function SocialIcon({ label, path }: { label: string; path: string }) {
+function SocialIcon({ label, path, href = "#" }: { label: string; path: string; href?: string }) {
   return (
     <a
-      href="#"
+      href={href}
+      target={href !== "#" ? "_blank" : undefined}
+      rel={href !== "#" ? "noreferrer" : undefined}
       aria-label={label}
       className="grid h-10 w-10 place-items-center rounded-lg border border-white/10 text-white/70 transition hover:border-gold-500 hover:text-gold-400"
     >
@@ -54,6 +54,7 @@ export function Footer() {
             />
             <SocialIcon
               label="Instagram"
+              href={SITE.instagram}
               path="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm0 2a2 2 0 1 1-2 2 2 2 0 0 1 2-2z"
             />
             <SocialIcon
@@ -100,16 +101,22 @@ export function Footer() {
           <h3 className="font-display text-sm font-bold tracking-[0.25em] text-white">CONTACTO</h3>
           <ul className="mt-4 space-y-3 text-sm text-white/60">
             <li className="flex items-start gap-2.5">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-              <span>{SITE.phone} · {SITE.whatsappDisplay}</span>
+              <MessageCircle className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
+              <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer" className="transition hover:text-gold-400">
+                {SITE.whatsappDisplay}
+              </a>
             </li>
             <li className="flex items-start gap-2.5">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-              <a href={`mailto:${SITE.email}`} className="transition hover:text-gold-400">{SITE.email}</a>
+              <a href={`mailto:${SITE.email}`} className="break-all transition hover:text-gold-400">{SITE.email}</a>
             </li>
             <li className="flex items-start gap-2.5">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
-              <span>{SITE.address}</span>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" aria-hidden="true">
+                <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm10 2a2 2 0 1 0 2 2 2 2 0 0 0-2-2zM12 8a4 4 0 1 0 4 4 4 4 0 0 0-4-4zm0 2a2 2 0 1 1-2 2 2 2 0 0 1 2-2z" />
+              </svg>
+              <a href={SITE.instagram} target="_blank" rel="noreferrer" className="transition hover:text-gold-400">
+                {SITE.instagramHandle}
+              </a>
             </li>
             <li className="flex items-start gap-2.5">
               <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
